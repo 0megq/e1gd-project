@@ -2,3 +2,4 @@
 Made by
 - Nick Vatanshenas
 - Camden Simardjaja
+- Bryan Nguyen
