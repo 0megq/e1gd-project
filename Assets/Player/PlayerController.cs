@@ -39,7 +39,8 @@ public class PlayerController : MonoBehaviour
         cam.transform.localRotation = Quaternion.Euler(xRot, 0f, 0f);
         this.transform.localRotation = Quaternion.Euler(0f, yRot, 0f);
 
-        this.transform.position += move * speed;
+        this.transform.position += move.x * speed * this.transform.right;
+        this.transform.position += move.y * speed * this.transform.forward;
     }
 
     void OnLook(InputValue val){
@@ -56,8 +57,7 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnMove(InputValue val){
-        move = val.Get<Vector2>().x * this.transform.right;
-        move += val.Get<Vector2>().y * this.transform.forward;
+        move = val.Get<Vector2>();
     }
 
     void OnJump(){
