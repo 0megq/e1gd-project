@@ -1,18 +1,14 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class MeleeEnemy : BaseEnemy
 {
-    private void Awake()
-    {
-        maxHealth = 100f;
-        speed = 5f;
-        damageAmount = 10f;
-    }
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Start()
     {
         base.Start();
+
+        Attack();
     }
 
     // Update is called once per frame
@@ -24,5 +20,10 @@ public class MeleeEnemy : BaseEnemy
     protected override void Attack()
     {
         base.Attack();
+
+        if (agent != null && target != null)
+        {
+            agent.SetDestination(target.position);
+        }
     }
 }

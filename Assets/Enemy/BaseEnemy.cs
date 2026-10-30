@@ -1,16 +1,23 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BaseEnemy : MonoBehaviour
 {
-    [SerializeField] protected float health;
-    [SerializeField] protected float maxHealth;
-    [SerializeField] protected float speed;
-    [SerializeField] protected float damageAmount;
+    protected float health;
+    protected float maxHealth;
+    protected float speed;
+    protected float damageAmount;
+
+    [SerializeField] protected Transform target;
+
+    protected NavMeshAgent agent;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected virtual void Start()
     {
         health = maxHealth;
+
+        TryGetComponent<NavMeshAgent>(out agent);
     }
 
     // Update is called once per frame
@@ -19,7 +26,7 @@ public class BaseEnemy : MonoBehaviour
         
     }
     
-    public void ReceiveDamage(int damage)
+    public void ReceiveDamage(float damage)
     {
 
     }
