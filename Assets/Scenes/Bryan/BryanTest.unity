@@ -127,9 +127,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1096306546661293127, guid: c571dee9fb026334f9743906527d674f, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3689276700569064515, guid: c571dee9fb026334f9743906527d674f, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3689276700569064515, guid: c571dee9fb026334f9743906527d674f, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3795388405768808141, guid: c571dee9fb026334f9743906527d674f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -190,7 +198,7 @@ GameObject:
   - component: {fileID: 455561883}
   - component: {fileID: 455561887}
   - component: {fileID: 455561888}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: MeleeEnemyTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -284,7 +292,7 @@ Transform:
   m_GameObject: {fileID: 455561882}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -23, y: 3, z: 21}
+  m_LocalPosition: {x: -23, y: 5, z: 21}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -324,7 +332,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c26721e7c77b7747b979b66ca4ba87b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeEnemy
+  health: 0
+  maxHealth: 0
+  speed: 0
+  damageAmount: 0
   target: {fileID: 855798193}
+  attackRange: 2
+  lineOfSightLayers:
+    serializedVersion: 2
+    m_Bits: 192
 --- !u!4 &855798193 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3795388405768808141, guid: c571dee9fb026334f9743906527d674f, type: 3}
@@ -343,7 +359,7 @@ GameObject:
   - component: {fileID: 999968575}
   - component: {fileID: 999968574}
   - component: {fileID: 999968578}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Ground
   m_Icon: {fileID: 0}

@@ -3,10 +3,10 @@ using UnityEngine.AI;
 
 public class BaseEnemy : MonoBehaviour
 {
-    protected float health;
-    protected float maxHealth;
-    protected float speed;
-    protected float damageAmount;
+    [SerializeField] protected float health = 0f;
+    [SerializeField] protected float maxHealth = 100f;
+    [SerializeField] protected float speed = 5f;
+    [SerializeField] protected float damageAmount = 10f;
 
     [SerializeField] protected Transform target;
 
