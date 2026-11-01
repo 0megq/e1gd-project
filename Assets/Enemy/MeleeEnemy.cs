@@ -54,7 +54,5 @@ public class MeleeEnemy : BaseEnemy
     protected override void Attack()
     {
         base.Attack();
-
-        Debug.Log("Attack!");
     }
 }

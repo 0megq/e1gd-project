@@ -7,6 +7,8 @@ public class Bullet : MonoBehaviour
 
     private Rigidbody rb;
 
+    private float damage = 10f;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -16,6 +18,14 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            if (collision.gameObject.TryGetComponent<BaseEnemy>(out BaseEnemy enemy))
+            {
+                enemy.ReceiveDamage(damage);
+            }
+        }
+
         Destroy(gameObject);
     }
 }
