@@ -26,12 +26,6 @@ public class BaseEnemy : MonoBehaviour
             agent.speed = speed;
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     
     public void ReceiveDamage(float damage)
     {

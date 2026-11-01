@@ -16,6 +16,9 @@ public class PlayerController : MonoBehaviour
     private float mouseX;
     private float mouseY;
 
+    private float health = 0f;
+    [SerializeField] private float maxHealth = 100f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -23,6 +26,8 @@ public class PlayerController : MonoBehaviour
 
         cam = Camera.main;
         rb = GetComponent<Rigidbody>();
+
+        health = maxHealth;
     }
 
     // Update is called once per frame
@@ -79,6 +84,16 @@ public class PlayerController : MonoBehaviour
         if (collision.collider.CompareTag("Ground"))
         {
             onGround = false;
+        }
+    }
+
+    public void ReceiveDamage(float amount)
+    {
+        health = Mathf.Clamp(0, health - amount, maxHealth);
+
+        if (health <= 0)
+        {
+            Debug.Log("rip :(");
         }
     }
 }
