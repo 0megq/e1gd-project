@@ -6,6 +6,9 @@ public class MeleeEnemy : BaseEnemy
 
     [SerializeField] private LayerMask lineOfSightLayers;
 
+    [SerializeField] private float attackRate = 2f;
+    private float nextAttackTime = 0f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Start()
     {
@@ -26,7 +29,19 @@ public class MeleeEnemy : BaseEnemy
         {
             agent.isStopped = true;
             agent.velocity = Vector3.zero;
-            Attack();
+
+            Vector3 lookPosition = target.position;
+
+            lookPosition.y = transform.position.y;
+
+            transform.LookAt(lookPosition);
+
+            if (Time.time >= nextAttackTime)
+            {
+                Attack();
+
+                nextAttackTime = Time.time + attackRate;
+            }
         }
         else
         {
@@ -54,7 +69,5 @@ public class MeleeEnemy : BaseEnemy
     protected override void Attack()
     {
         base.Attack();
-
-        Debug.Log("Attack!");
     }
 }
