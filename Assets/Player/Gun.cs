@@ -112,4 +112,8 @@ public class Gun : MonoBehaviour
 
         transform.localPosition = initialPosition;
     }
+
+    public int getCurAmmo(){
+        return currentAmmo;
+    }
 }

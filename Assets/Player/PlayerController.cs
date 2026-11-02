@@ -96,4 +96,12 @@ public class PlayerController : MonoBehaviour
             Debug.Log("rip :(");
         }
     }
+
+    public float getCurHealth(){
+        return health;
+    }
+
+    public float getMaxHealth(){
+        return maxHealth;
+    }
 }
