@@ -9,10 +9,16 @@ public class MeleeEnemy : BaseEnemy
     [SerializeField] private float attackRate = 2f;
     private float nextAttackTime = 0f;
 
+    private EnemyState currentState = EnemyState.Chasing;
+
+    private Color baseColor;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Start()
     {
         base.Start();
+
+        baseColor = enemyRenderer.material.color;
     }
 
     // Update is called once per frame
@@ -27,6 +33,8 @@ public class MeleeEnemy : BaseEnemy
 
         if (distanceToPlayer < attackRange && HasLineOfSight())
         {
+            ChangeState(EnemyState.Attacking);
+
             agent.isStopped = true;
             agent.velocity = Vector3.zero;
 
@@ -45,9 +53,35 @@ public class MeleeEnemy : BaseEnemy
         }
         else
         {
+            ChangeState(EnemyState.Chasing);
             agent.isStopped = false;
             agent.SetDestination(target.position);
         }
+    }
+
+    private void ChangeState(EnemyState state)
+    {
+        if (currentState == state)
+        {
+            return;
+        }
+
+        if (state == EnemyState.Attacking)
+        {
+            enemyRenderer.material.color = Color.red;
+        }
+
+        if (state == EnemyState.Chasing)
+        {
+            enemyRenderer.material.color = baseColor;
+        }
+
+        if (state == EnemyState.Fleeing)
+        {
+            enemyRenderer.material.color = Color.green;
+        }
+
+        currentState = state;
     }
 
     private bool HasLineOfSight()

@@ -3,6 +3,13 @@ using UnityEngine.AI;
 
 public class BaseEnemy : MonoBehaviour
 {
+    public enum EnemyState
+    {
+        Chasing,
+        Attacking,
+        Fleeing
+    }
+
     protected float health = 0f;
     [SerializeField] protected float maxHealth = 100f;
     [SerializeField] protected float speed = 5f;
@@ -11,6 +18,8 @@ public class BaseEnemy : MonoBehaviour
     [SerializeField] protected Transform target;
 
     protected NavMeshAgent agent = null;
+
+    protected Renderer enemyRenderer;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected virtual void Start()
@@ -25,6 +34,8 @@ public class BaseEnemy : MonoBehaviour
         {
             agent.speed = speed;
         }
+
+        TryGetComponent<Renderer>(out enemyRenderer);
     }
     
     public void ReceiveDamage(float damage)

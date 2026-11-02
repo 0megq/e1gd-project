@@ -6,7 +6,9 @@ public class RangedEnemy : BaseEnemy
 {
     [SerializeField] private float attackRange = 10f;
 
-    [SerializeField] private float runDistance = 5f;
+    [SerializeField] private float runDistance = 7.5f;
+
+    [SerializeField] private float fleeDistance = 5f;
 
     [SerializeField] private LayerMask lineOfSightLayers;
 
@@ -15,10 +17,59 @@ public class RangedEnemy : BaseEnemy
     [SerializeField] private float fireRate = 2f;
     private float nextFireTime = 0f;
 
+    private EnemyState currentState = EnemyState.Chasing;
+
+    private Color baseColor;
+
+    private bool HasReachedDestination()
+    {
+        if (agent.pathPending == true)
+        {
+            return false;
+        }
+
+        if (agent.remainingDistance <= agent.stoppingDistance)
+        {
+            if (agent.hasPath == false || agent.velocity.sqrMagnitude == 0f)
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    private void ChangeState(EnemyState state)
+    {
+        if (currentState == state)
+        {
+            return;
+        }
+
+        if (state == EnemyState.Attacking)
+        {
+            enemyRenderer.material.color = Color.red;
+        }
+
+        if (state == EnemyState.Chasing)
+        {
+            enemyRenderer.material.color = baseColor;
+        }
+
+        if (state == EnemyState.Fleeing)
+        {
+            enemyRenderer.material.color = Color.green;
+        }
+
+        currentState = state;
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Start()
     {
         base.Start();
+
+        baseColor = enemyRenderer.material.color;
     }
 
     // Update is called once per frame
@@ -29,14 +80,26 @@ public class RangedEnemy : BaseEnemy
             return;
         }
 
+        if (currentState == EnemyState.Fleeing)
+        {
+            if (HasReachedDestination())
+            {
+                ChangeState(EnemyState.Chasing);
+            }
+
+            return;
+        }
+
         float distanceToPlayer = Vector3.Distance(transform.position, target.position);
 
-        if (distanceToPlayer < runDistance)
+        if (distanceToPlayer < fleeDistance)
         {
             Run();
         }
         else if (distanceToPlayer < attackRange && HasLineOfSight())
         {
+            ChangeState(EnemyState.Attacking);
+
             agent.isStopped = true;
             agent.velocity = Vector3.zero;
 
@@ -55,6 +118,7 @@ public class RangedEnemy : BaseEnemy
         }
         else
         {
+            ChangeState(EnemyState.Chasing);
             agent.isStopped = false;
             agent.SetDestination(target.position);
         }
@@ -78,6 +142,8 @@ public class RangedEnemy : BaseEnemy
 
     private void Run()
     {
+        ChangeState(EnemyState.Fleeing);
+
         Vector3 directionAway = (transform.position - target.position).normalized;
 
         Vector3 fleePosition = transform.position + directionAway * runDistance;
@@ -89,6 +155,8 @@ public class RangedEnemy : BaseEnemy
         }
         else
         {
+            ChangeState(EnemyState.Attacking);
+
             agent.isStopped = true;
 
             Vector3 lookPosition = target.position;
