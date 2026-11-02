@@ -13,6 +13,7 @@ public class NickGunRecoilTest : MonoBehaviour
             return;
         }
 
+        Shake.shake = true;
         timeSinceShoot = 0.2f;
     }
 
