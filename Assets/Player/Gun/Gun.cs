@@ -12,9 +12,9 @@ public class Gun : MonoBehaviour
     public GameObject bullet;
     public Transform bulletSpawnPoint;
 
-    private int currentAmmo;
-    private bool isReloading = false;
-    private float nextTimeToFire = 0f;
+    protected int currentAmmo;
+    protected bool isReloading = false;
+    protected float nextTimeToFire = 0f;
 
     public UnityEvent shotEvent; 
 
@@ -49,7 +49,7 @@ public class Gun : MonoBehaviour
         Instantiate(bullet, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
     }
 
-    IEnumerator Reload()
+    public IEnumerator Reload()
     {
         isReloading = true;
 

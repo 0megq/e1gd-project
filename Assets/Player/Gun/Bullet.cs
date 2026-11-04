@@ -7,7 +7,7 @@ public class Bullet : MonoBehaviour
 
     private Rigidbody rb;
 
-    private float damage = 10f;
+    [SerializeField] float damage = 10f;
 
     void Start()
     {
