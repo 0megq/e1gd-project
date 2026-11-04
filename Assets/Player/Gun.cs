@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
 
 public class Gun : MonoBehaviour
 {
@@ -11,28 +12,20 @@ public class Gun : MonoBehaviour
     public GameObject bullet;
     public Transform bulletSpawnPoint;
 
-    public GameObject weaponFlash;
-
-    public float recoilDistance = 0.1f;
-    public float recoilSpeed = 15f;
-
     private int currentAmmo;
     private bool isReloading = false;
     private float nextTimeToFire = 0f;
 
-    private Quaternion initialRotation;
-    private Vector3 initialPosition;
-    private Vector3 reloadRotationOffset = new Vector3(66, 50, 50);
+    public UnityEvent shotEvent; 
 
     void Start()
     {
         currentAmmo = magSize;
-        initialRotation = transform.localRotation;
-        initialPosition = transform.localPosition;
     }
 
     public void Shoot()
     {
+        // Don't shoot if reloading
         if (isReloading) return;
         if (Time.time < nextTimeToFire) return;
 
@@ -42,6 +35,9 @@ public class Gun : MonoBehaviour
             StartCoroutine(Reload());
             return;
         }
+
+        // Fire the gun
+        shotEvent.Invoke();
 
         // restart firecount timer
         nextTimeToFire = Time.time + fireRate;
@@ -57,25 +53,7 @@ public class Gun : MonoBehaviour
     {
         isReloading = true;
 
-        Quaternion targetRotation = Quaternion.Euler(initialRotation.eulerAngles + reloadRotationOffset);
-        float halfReload = reloadTime / 2f;
-        float t = 0f;
-
-        while (t < halfReload)
-        {
-            t += Time.deltaTime;
-            transform.localRotation = Quaternion.Slerp(initialRotation, targetRotation, t / halfReload);
-            yield return null;
-        }
-
-        t = 0f;
-
-        while (t < halfReload)
-        {
-            t += Time.deltaTime;
-            transform.localRotation = Quaternion.Slerp(targetRotation, initialRotation, t / halfReload);
-            yield return null;
-        }
+        yield return new WaitForSeconds(reloadTime);
 
         currentAmmo = magSize;
         isReloading = false;
@@ -87,30 +65,6 @@ public class Gun : MonoBehaviour
         if (currentAmmo == magSize) return;
 
         StartCoroutine(Reload());
-    }
-
-    private IEnumerator Recoil()
-    {
-        Vector3 recoilTarget = initialPosition + new Vector3(recoilDistance, 0, 0);
-        float t = 0;
-
-        while (t < 1f)
-        {
-            t += Time.deltaTime * recoilSpeed;
-            transform.localPosition = Vector3.Lerp(initialPosition, recoilTarget, t);
-            yield return null;
-        }
-
-        t = 0f;
-
-        while (t < 1f)
-        {
-            t += Time.deltaTime * recoilSpeed;
-            transform.localPosition = Vector3.Lerp(recoilTarget, initialPosition, t);
-            yield return null;
-        }
-
-        transform.localPosition = initialPosition;
     }
 
     public int getCurAmmo(){
