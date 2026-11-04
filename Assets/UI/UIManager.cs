@@ -4,8 +4,8 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public TextMeshProUGUI ammoCount;
-    public TextMeshProUGUI health;
+    [SerializeField] TextMeshProUGUI ammoCount;
+    [SerializeField] TextMeshProUGUI health;
 
     // Update is called once per frame
     void Update()
