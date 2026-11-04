@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     {
         ui.updateAmmo(pShooting.gun.getCurAmmo(), pShooting.gun.magSize);
         ui.updateHealth(pController.getCurHealth(), pController.getMaxHealth());
+        // update the bullet spawn point
+        pShooting.gun.bulletSpawnPoint = pController.cam.ScreenToWorldPoint(presenter.firepoint.position + Vector3.forward * 0.5f);
     }
 
     void WeaponFired()
