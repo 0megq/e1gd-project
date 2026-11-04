@@ -2,16 +2,17 @@ using UnityEngine;
 
 public class MeleeEnemy : BaseEnemy
 {
-    [SerializeField] private float attackRange = 2f;
+    [SerializeField] protected float attackRange = 2f;
 
     [SerializeField] private LayerMask lineOfSightLayers;
 
-    [SerializeField] private float attackRate = 2f;
-    private float nextAttackTime = 0f;
+    [SerializeField] protected float baseAttackRate = 2f;
+    protected float attackRate = 0f;
+    protected float nextAttackTime = 0f;
 
-    private EnemyState currentState = EnemyState.Chasing;
+    protected EnemyState currentState = EnemyState.Chasing;
 
-    private Color baseColor;
+    protected Color baseColor;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Start()
@@ -19,6 +20,8 @@ public class MeleeEnemy : BaseEnemy
         base.Start();
 
         baseColor = enemyRenderer.material.color;
+
+        attackRate = baseAttackRate;
     }
 
     // Update is called once per frame
@@ -69,6 +72,8 @@ public class MeleeEnemy : BaseEnemy
         if (state == EnemyState.Attacking)
         {
             enemyRenderer.material.color = Color.red;
+
+            attackRate = baseAttackRate;
         }
 
         if (state == EnemyState.Chasing)
@@ -79,12 +84,14 @@ public class MeleeEnemy : BaseEnemy
         if (state == EnemyState.Fleeing)
         {
             enemyRenderer.material.color = Color.green;
+
+            attackRate = baseAttackRate * 2;
         }
 
         currentState = state;
     }
 
-    private bool HasLineOfSight()
+    protected bool HasLineOfSight()
     {
         Vector3 startPosition = transform.position;
         Vector3 directionToPlayer = (target.position - transform.position).normalized;

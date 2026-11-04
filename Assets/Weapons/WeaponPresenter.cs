@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class WeaponPresenter : MonoBehaviour
 {
+    public RectTransform firepoint;
     Animator animator;
 
     void Start()

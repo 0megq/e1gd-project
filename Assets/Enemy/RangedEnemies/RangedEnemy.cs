@@ -14,7 +14,9 @@ public class RangedEnemy : BaseEnemy
 
     [SerializeField] private GameObject bullet;
 
-    [SerializeField] private float fireRate = 2f;
+    [SerializeField] private float baseFireRate = 2f;
+
+    private float fireRate = 0f;
     private float nextFireTime = 0f;
 
     private EnemyState currentState = EnemyState.Chasing;
@@ -49,6 +51,8 @@ public class RangedEnemy : BaseEnemy
         if (state == EnemyState.Attacking)
         {
             enemyRenderer.material.color = Color.red;
+
+            fireRate = baseFireRate;
         }
 
         if (state == EnemyState.Chasing)
@@ -59,6 +63,8 @@ public class RangedEnemy : BaseEnemy
         if (state == EnemyState.Fleeing)
         {
             enemyRenderer.material.color = Color.green;
+
+            fireRate = baseFireRate * 2;
         }
 
         currentState = state;
@@ -70,6 +76,8 @@ public class RangedEnemy : BaseEnemy
         base.Start();
 
         baseColor = enemyRenderer.material.color;
+
+        fireRate = baseFireRate;
     }
 
     // Update is called once per frame
@@ -152,6 +160,13 @@ public class RangedEnemy : BaseEnemy
         {
             agent.isStopped = false;
             agent.SetDestination(hit.position);
+
+            if (Time.time >= nextFireTime)
+            {
+                Attack();
+
+                nextFireTime = Time.time + fireRate;
+            }
         }
         else
         {
@@ -178,6 +193,6 @@ public class RangedEnemy : BaseEnemy
     {
         base.Attack();
 
-        Instantiate(bullet, transform.position + (transform.forward * 1.5f), transform.rotation);
+        Instantiate(bullet, transform.position + ((target.position - transform.position).normalized * 1.5f), Quaternion.LookRotation(target.position - transform.position));
     }
 }

@@ -16,11 +16,12 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject, lifeTime);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collider)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (collider.CompareTag("Player")) return;
+        if (collider.CompareTag("Enemy"))
         {
-            if (collision.gameObject.TryGetComponent<BaseEnemy>(out BaseEnemy enemy))
+            if (collider.TryGetComponent<BaseEnemy>(out BaseEnemy enemy))
             {
                 enemy.ReceiveDamage(damage);
             }

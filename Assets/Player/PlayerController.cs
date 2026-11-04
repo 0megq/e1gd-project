@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private Vector3 move;
     private bool onGround;
-    private Camera cam;
+    public Camera cam;
     private float xRot = 0f;
     private float yRot = 0f;
     private float mouseX;

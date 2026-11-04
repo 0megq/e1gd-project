@@ -5,9 +5,11 @@ public class BaseEnemy : MonoBehaviour
 {
     public enum EnemyState
     {
+        Idle,
         Chasing,
         Attacking,
-        Fleeing
+        Fleeing,
+        Charging
     }
 
     protected float health = 0f;

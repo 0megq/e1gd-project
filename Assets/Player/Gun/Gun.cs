@@ -10,7 +10,7 @@ public class Gun : MonoBehaviour
     public int magSize = 20;
 
     public GameObject bullet;
-    public Transform bulletSpawnPoint;
+    public Vector3 bulletSpawnPoint;
 
     protected int currentAmmo;
     protected bool isReloading = false;
@@ -46,7 +46,7 @@ public class Gun : MonoBehaviour
         currentAmmo--;
 
         // spawn bullet
-        Instantiate(bullet, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
+        Instantiate(bullet, bulletSpawnPoint, transform.rotation);
     }
 
     public IEnumerator Reload()
