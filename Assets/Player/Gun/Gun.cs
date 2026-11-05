@@ -46,7 +46,8 @@ public class Gun : MonoBehaviour
         currentAmmo--;
 
         // spawn bullet
-        Instantiate(bullet, bulletSpawnPoint, transform.rotation);
+        GameObject bulletObject = Instantiate(bullet, bulletSpawnPoint, transform.rotation);
+        
     }
 
     public IEnumerator Reload()
