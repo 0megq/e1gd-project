@@ -42,10 +42,10 @@ public class PlayerController : MonoBehaviour
         yRot += mouseX;
 
         cam.transform.localRotation = Quaternion.Euler(xRot, 0f, 0f);
-        this.transform.localRotation = Quaternion.Euler(0f, yRot, 0f);
+        transform.localRotation = Quaternion.Euler(0f, yRot, 0f);
 
-        this.transform.position += move.x * speed * this.transform.right;
-        this.transform.position += move.y * speed * this.transform.forward;
+        // set the new horizontal velocity while keeping the vertical component
+        rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0) + move.x * speed * transform.right + move.y * speed * transform.forward;       
     }
 
     void OnLook(InputValue val){
