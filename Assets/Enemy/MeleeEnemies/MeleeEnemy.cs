@@ -1,94 +1,103 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class MeleeEnemy : BaseEnemy
 {
     [SerializeField] protected float attackRange = 2f;
-
     [SerializeField] private LayerMask lineOfSightLayers;
-
     [SerializeField] protected float baseAttackRate = 2f;
+
     protected float attackRate = 0f;
     protected float nextAttackTime = 0f;
 
     protected EnemyState currentState = EnemyState.Chasing;
-
     protected Color baseColor;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Start()
     {
         base.Start();
-
         baseColor = enemyRenderer.material.color;
-
         attackRate = baseAttackRate;
     }
 
-    // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         if (target == null || agent == null)
         {
             return;
         }
 
+        UpdateState();
+    }
+
+    private void UpdateState()
+    {
         float distanceToPlayer = Vector3.Distance(transform.position, target.position);
 
-        if (distanceToPlayer < attackRange && HasLineOfSight())
+        switch (currentState)
         {
-            ChangeState(EnemyState.Attacking);
+            case EnemyState.Idle:
+                ChangeState(EnemyState.Chasing);
+                break;
 
-            agent.isStopped = true;
-            agent.velocity = Vector3.zero;
+            case EnemyState.Chasing:
+                agent.isStopped = false;
+                agent.SetDestination(target.position);
 
-            Vector3 lookPosition = target.position;
+                if (distanceToPlayer < attackRange && HasLineOfSight())
+                {
+                    ChangeState(EnemyState.Attacking);
+                }
+                break;
 
-            lookPosition.y = transform.position.y;
+            case EnemyState.Attacking:
+                agent.isStopped = true;
+                agent.velocity = Vector3.zero;
 
-            transform.LookAt(lookPosition);
+                Vector3 lookPosition = target.position;
+                lookPosition.y = transform.position.y;
+                transform.LookAt(lookPosition);
 
-            if (Time.time >= nextAttackTime)
-            {
-                Attack();
+                if (distanceToPlayer >= attackRange || !HasLineOfSight())
+                {
+                    ChangeState(EnemyState.Chasing);
+                    break;
+                }
 
-                nextAttackTime = Time.time + attackRate;
-            }
-        }
-        else
-        {
-            ChangeState(EnemyState.Chasing);
-            agent.isStopped = false;
-            agent.SetDestination(target.position);
+                if (Time.time >= nextAttackTime)
+                {
+                    Attack();
+                    nextAttackTime = Time.time + attackRate;
+                }
+                break;
         }
     }
 
-    private void ChangeState(EnemyState state)
+    private void ChangeState(EnemyState newState)
     {
-        if (currentState == state)
+        if (currentState == newState)
         {
             return;
         }
 
-        if (state == EnemyState.Attacking)
+        currentState = newState;
+
+        switch (currentState)
         {
-            enemyRenderer.material.color = Color.red;
+            case EnemyState.Attacking:
+                enemyRenderer.material.color = Color.red;
+                attackRate = baseAttackRate;
+                break;
 
-            attackRate = baseAttackRate;
+            case EnemyState.Chasing:
+                enemyRenderer.material.color = baseColor;
+                break;
+
+            case EnemyState.Fleeing:
+                enemyRenderer.material.color = Color.green;
+                attackRate = baseAttackRate * 2;
+                break;
         }
-
-        if (state == EnemyState.Chasing)
-        {
-            enemyRenderer.material.color = baseColor;
-        }
-
-        if (state == EnemyState.Fleeing)
-        {
-            enemyRenderer.material.color = Color.green;
-
-            attackRate = baseAttackRate * 2;
-        }
-
-        currentState = state;
     }
 
     protected bool HasLineOfSight()

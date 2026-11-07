@@ -1,126 +1,193 @@
 using System.Collections;
-using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class ChargeEnemy : MeleeEnemy
 {
+    [Header("Charge Settings")]
     [SerializeField] private float minChargeRate = 10f;
     [SerializeField] private float maxChargeRate = 30f;
+    [SerializeField] private float chargeDuration = 3f;
+    [SerializeField] private float chargeSpeed = 10f;
 
     private float chargeRate = 0f;
     private float nextChargeTime = 0f;
-    private float chargeDuration = 3f;
-
     private Coroutine chargeRoutine = null;
+    private Rigidbody rb = null;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Start()
     {
         base.Start();
 
         chargeRate = Random.Range(minChargeRate, maxChargeRate);
+        nextChargeTime = Time.time + chargeRate + chargeDuration;
 
-        nextChargeTime += Random.Range(minChargeRate, maxChargeRate) + chargeDuration;
+        TryGetComponent<Rigidbody>(out rb);
+        if (rb != null) rb.isKinematic = true;
     }
 
-    private void ChangeState(EnemyState state)
+    protected override void Update()
     {
-        if (currentState == state)
-        {
-            return;
-        }
+        if (target == null || agent == null) return;
 
-        if (state == EnemyState.Attacking)
-        {
-            enemyRenderer.material.color = Color.red;
-
-            attackRate = baseAttackRate;
-        }
-
-        if (state == EnemyState.Chasing)
-        {
-            enemyRenderer.material.color = baseColor;
-        }
-
-        if (state == EnemyState.Fleeing)
-        {
-            enemyRenderer.material.color = Color.green;
-
-            attackRate = baseAttackRate * 2;
-        }
-
-        if (state == EnemyState.Charging)
-        {
-            enemyRenderer.material.color = Color.yellow;
-        }
-
-        currentState = state;
+        UpdateState();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void UpdateState()
     {
-        if (target == null || agent == null)
-        {
-            return;
-        }
-
-        if (chargeRoutine != null)
-        {
-            return;
-        }
-
         float distanceToPlayer = Vector3.Distance(transform.position, target.position);
 
-        if (distanceToPlayer < attackRange && HasLineOfSight())
+        switch (currentState)
         {
-            ChangeState(EnemyState.Attacking);
+            case EnemyState.Idle:
+                ChangeState(EnemyState.Chasing);
+                break;
 
-            agent.isStopped = true;
-            agent.velocity = Vector3.zero;
+            case EnemyState.Chasing:
+                agent.isStopped = false;
+                agent.SetDestination(target.position);
 
-            Vector3 lookPosition = target.position;
+                if (Time.time >= nextChargeTime)
+                {
+                    ChangeState(EnemyState.Charging);
+                    break;
+                }
 
-            lookPosition.y = transform.position.y;
+                if (distanceToPlayer < attackRange && HasLineOfSight())
+                {
+                    ChangeState(EnemyState.Attacking);
+                }
+                break;
 
-            transform.LookAt(lookPosition);
+            case EnemyState.Attacking:
+                agent.isStopped = true;
+                agent.velocity = Vector3.zero;
 
-            if (Time.time >= nextAttackTime)
-            {
-                Attack();
+                Vector3 lookPosition = target.position;
+                lookPosition.y = transform.position.y;
+                transform.LookAt(lookPosition);
 
-                nextAttackTime = Time.time + attackRate;
-            }
-        }
-        else
-        {
-            ChangeState(EnemyState.Chasing);
-            agent.isStopped = false;
-            agent.SetDestination(target.position);
-        }
+                if (Time.time >= nextChargeTime)
+                {
+                    ChangeState(EnemyState.Charging);
+                    break;
+                }
 
-        if (Time.time > nextChargeTime)
-        {
-            nextChargeTime += chargeRate + chargeDuration;
+                if (distanceToPlayer > attackRange || !HasLineOfSight())
+                {
+                    ChangeState(EnemyState.Chasing);
+                    break;
+                }
 
-            chargeRate = Random.Range(minChargeRate, maxChargeRate);
+                if (Time.time >= nextAttackTime)
+                {
+                    Attack();
+                    nextAttackTime = Time.time + attackRate;
+                }
+                break;
 
-            chargeRoutine = StartCoroutine(Charge());
+            case EnemyState.Charging:
+                break;
         }
     }
 
-    protected override void Attack()
+    private void ChangeState(EnemyState newState)
     {
-        base.Attack();
+        if (currentState == newState) return;
+
+        currentState = newState;
+
+        if (TryGetComponent<Renderer>(out Renderer enemyRenderer))
+        {
+            switch (currentState)
+            {
+                case EnemyState.Attacking:
+                    enemyRenderer.material.color = Color.red;
+                    attackRate = baseAttackRate;
+                    break;
+
+                case EnemyState.Chasing:
+                    enemyRenderer.material.color = baseColor;
+                    break;
+
+                case EnemyState.Fleeing:
+                    enemyRenderer.material.color = Color.green;
+                    attackRate = baseAttackRate * 2;
+                    break;
+
+                case EnemyState.Charging:
+                    enemyRenderer.material.color = Color.yellow;
+                    if (chargeRoutine == null)
+                    {
+                        chargeRoutine = StartCoroutine(Charge());
+                    }
+                    break;
+            }
+        }
     }
 
     private IEnumerator Charge()
     {
-        ChangeState(EnemyState.Charging);
+        agent.isStopped = true;
+        agent.velocity = Vector3.zero;
 
-        yield return new WaitForSeconds(chargeDuration);
+        float timer = 0f;
+
+        while (timer < chargeDuration)
+        {
+            Vector3 lookPosition = target.position;
+            lookPosition.y = transform.position.y;
+            Vector3 directionToTarget = (lookPosition - transform.position).normalized;
+            if (directionToTarget != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+            }
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        agent.enabled = false;
+        rb.isKinematic = false;
+
+        rb.linearVelocity = transform.forward * chargeSpeed;
+
+        yield return new WaitForSeconds(chargeDuration / 3);
+
+        rb.linearVelocity = Vector3.zero;
+        rb.isKinematic = true;
+        agent.enabled = true;
+        agent.Warp(transform.position);
+
+        chargeRate = Random.Range(minChargeRate, maxChargeRate);
+        nextChargeTime = Time.time + chargeRate + chargeDuration;
 
         chargeRoutine = null;
+        ChangeState(EnemyState.Chasing);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (chargeRoutine != null)
+            {
+                StopCoroutine(chargeRoutine);
+
+                rb.linearVelocity = Vector3.zero;
+                rb.isKinematic = true;
+                agent.enabled = true;
+                agent.Warp(transform.position);
+
+                chargeRate = Random.Range(minChargeRate, maxChargeRate);
+                nextChargeTime = Time.time + chargeRate + chargeDuration;
+
+                chargeRoutine = null;
+
+                ChangeState(EnemyState.Attacking);
+            }
+
+            Attack();
+        }
     }
 }
