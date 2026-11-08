@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
         }
 
         // update the bullet spawn point
-        pShooting.gun.bulletSpawnPoint = pController.cam.ScreenToWorldPoint(presenter.firepoint.position + Vector3.forward * 0.5f);
+        pShooting.gun.bulletSpawnPoint = pController.cam.ScreenToWorldPoint(presenter.firepoint.position + Vector3.forward * 1.0f);
     }
 
     void WeaponFired()
