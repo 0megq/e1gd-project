@@ -46,7 +46,7 @@ public class Gun : MonoBehaviour
         currentAmmo--;
 
         // spawn bullet
-        GameObject bulletObject = Instantiate(bullet, bulletSpawnPoint, transform.rotation);
+        GameObject bulletObject = Instantiate(bullet, bulletSpawnPoint, Camera.main.transform.rotation * Quaternion.Euler(bullet.GetComponent<Bullet>().rot));
         
     }
 
