@@ -7,7 +7,7 @@ public class ChargeEnemy : MeleeEnemy
     [SerializeField] private float minChargeRate = 10f;
     [SerializeField] private float maxChargeRate = 30f;
     [SerializeField] private float chargeDuration = 3f;
-    [SerializeField] private float chargeSpeed = 10f;
+    [SerializeField] private float chargeSpeed = 15f;
 
     private float chargeRate = 0f;
     private float nextChargeTime = 0f;
@@ -93,6 +93,24 @@ public class ChargeEnemy : MeleeEnemy
     private void ChangeState(EnemyState newState)
     {
         if (currentState == newState) return;
+
+        if (currentState == EnemyState.Charging)
+        {
+            if (chargeRoutine != null)
+            {
+                StopCoroutine(chargeRoutine);
+
+                rb.linearVelocity = Vector3.zero;
+                rb.isKinematic = true;
+                agent.enabled = true;
+                agent.Warp(transform.position);
+
+                chargeRate = Random.Range(minChargeRate, maxChargeRate);
+                nextChargeTime = Time.time + chargeRate + chargeDuration;
+
+                chargeRoutine = null;
+            }
+        }
 
         currentState = newState;
 

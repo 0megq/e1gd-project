@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -8,6 +9,11 @@ public class Bullet : MonoBehaviour
     private Rigidbody rb;
 
     [SerializeField] float damage = 10f;
+
+    [SerializeField] bool destroyOnCollision = true;
+
+    public Vector3 rot;
+    public float distanceFromPlayer;
 
     void Start()
     {
@@ -27,6 +33,8 @@ public class Bullet : MonoBehaviour
             }
         }
 
-        Destroy(gameObject);
+        if(destroyOnCollision){
+            Destroy(gameObject);
+        }
     }
 }
