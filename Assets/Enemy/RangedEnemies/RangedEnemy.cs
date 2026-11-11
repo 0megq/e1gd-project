@@ -4,12 +4,12 @@ using UnityEngine.AI;
 public class RangedEnemy : BaseEnemy
 {
     [Header("Settings")]
-    [SerializeField] private float attackRange = 10f;
-    [SerializeField] private float runDistance = 7.5f;
-    [SerializeField] private float fleeDistance = 5f;
-    [SerializeField] private LayerMask lineOfSightLayers;
+    [SerializeField] protected float attackRange = 10f;
+    [SerializeField] protected float runDistance = 7.5f;
+    [SerializeField] protected float fleeDistance = 5f;
+    [SerializeField] protected LayerMask lineOfSightLayers;
     [SerializeField] private GameObject bullet;
-    [SerializeField] private float baseFireRate = 2f;
+    [SerializeField] protected float baseFireRate = 2f;
 
     private float fireRate = 0f;
     private float nextFireTime = 0f;
@@ -27,7 +27,7 @@ public class RangedEnemy : BaseEnemy
         fireRate = baseFireRate;
     }
 
-    void Update()
+    protected virtual void Update()
     {
         if (target == null || agent == null) return;
 
