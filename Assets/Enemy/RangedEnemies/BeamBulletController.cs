@@ -12,6 +12,8 @@ public class BeamBulletController : MonoBehaviour
 
     private float damage = 10f;
 
+    private bool tookDamage = false;
+
     void Start()
     {
         gameObject.SetActive(false);
@@ -38,7 +40,11 @@ public class BeamBulletController : MonoBehaviour
                 {
                     if (hit.collider.TryGetComponent<PlayerController>(out PlayerController player))
                     {
-                        player.ReceiveDamage(damage);
+                        if (tookDamage == false)
+                        {
+                            player.ReceiveDamage(damage);
+                            tookDamage = true;
+                        }
 
                         Debug.Log("OUCH!!!!");
                     }
@@ -59,5 +65,24 @@ public class BeamBulletController : MonoBehaviour
 
         gameObject.SetActive(false);
         gameObject.transform.localScale = new Vector3(0.3f, 0.3f, 0);
+
+        tookDamage = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            if (tookDamage == false)
+            {
+                if (other.TryGetComponent<PlayerController>(out PlayerController player))
+                {
+                    player.ReceiveDamage(damage);
+                    tookDamage = true;
+                }
+
+                Debug.Log("OUCH!!!!");
+            }
+        }
     }
 }

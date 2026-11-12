@@ -11,19 +11,21 @@ public class RangedEnemy : BaseEnemy
     [SerializeField] private GameObject bullet;
     [SerializeField] protected float baseFireRate = 2f;
 
-    private float fireRate = 0f;
-    private float nextFireTime = 0f;
+    protected float fireRate = 0f;
+    protected float nextFireTime = 0f;
 
-    private EnemyState currentState = EnemyState.Chasing;
-    private Color baseColor;
+    protected EnemyState currentState = EnemyState.Chasing;
+    protected Color baseColor;
 
     protected override void Start()
     {
         base.Start();
+
         if (TryGetComponent<Renderer>(out Renderer enemyRenderer))
         {
             baseColor = enemyRenderer.material.color;
         }
+
         fireRate = baseFireRate;
     }
 
