@@ -141,7 +141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
   speed: 60
   lifeTime: 3
-  damage: 10
+  damage: 4
   destroyOnCollision: 1
   rot: {x: 0, y: 90, z: 0}
   distanceFromPlayer: 1
