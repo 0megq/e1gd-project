@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c26721e7c77b7747b979b66ca4ba87b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeEnemy
-  maxHealth: 100
+  maxHealth: 20
   speed: 5
   damageAmount: 10
   target: {fileID: 0}
@@ -156,4 +156,4 @@ MonoBehaviour:
   lineOfSightLayers:
     serializedVersion: 2
     m_Bits: 192
-  attackRate: 1
+  baseAttackRate: 2
