@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 2772494324631653468}
   - component: {fileID: 18370944718997995}
   - component: {fileID: 846038568876671135}
-  - component: {fileID: 487943644017504842}
   - component: {fileID: 5950871577659040926}
   - component: {fileID: 3900747449176284228}
   - component: {fileID: 8845609539374341474}
+  - component: {fileID: 1806892848884379672}
   m_Layer: 0
   m_Name: SoundWave
   m_TagString: Untagged
@@ -3543,14 +3543,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &487943644017504842
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6502374404013988439}
-  m_Mesh: {fileID: 0}
 --- !u!64 &5950871577659040926
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3618,3 +3610,11 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!33 &1806892848884379672
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6502374404013988439}
+  m_Mesh: {fileID: 0}
