@@ -53,12 +53,17 @@ public class FlyingRangedEnemy : BaseEnemy
 
         Vector3 startPos = transform.position + new Vector3(0, 0.1f, 0);
 
-        if (Physics.SphereCast(startPos, radius, Vector3.up, out RaycastHit hit, desiredY + radius, lineOfSightLayers))
+        RaycastHit hit;
+
+        if (Physics.SphereCast(startPos, radius, Vector3.up, out hit, desiredY + radius, lineOfSightLayers))
         {
             float maxSafeHeight = hit.distance - (radius * 0.5f);
 
             desiredY = Mathf.Min(desiredY, maxSafeHeight);
         }
+
+        float minSafeHeight = radius;
+        desiredY = Mathf.Max(desiredY, minSafeHeight);
 
         Vector3 targetHeight = new Vector3(0, desiredY, 0);
         body.localPosition = Vector3.Lerp(body.localPosition, targetHeight, Time.deltaTime * 3f);

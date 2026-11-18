@@ -4,8 +4,8 @@ using UnityEngine;
 public class ChargeEnemy : MeleeEnemy
 {
     [Header("Charge Settings")]
-    [SerializeField] private float minChargeRate = 10f;
-    [SerializeField] private float maxChargeRate = 30f;
+    [SerializeField] private float minChargeRate = 3f;
+    [SerializeField] private float maxChargeRate = 5f;
     [SerializeField] private float chargeDuration = 3f;
     [SerializeField] private float chargeSpeed = 15f;
 
@@ -23,6 +23,8 @@ public class ChargeEnemy : MeleeEnemy
 
         TryGetComponent<Rigidbody>(out rb);
         if (rb != null) rb.isKinematic = true;
+
+        currentState = EnemyState.Idle;
     }
 
     protected override void Update()
@@ -36,10 +38,26 @@ public class ChargeEnemy : MeleeEnemy
     {
         float distanceToPlayer = Vector3.Distance(transform.position, target.position);
 
+        Vector3 lookPosition = target.position;
+        lookPosition.y = transform.position.y;
+
         switch (currentState)
         {
             case EnemyState.Idle:
-                ChangeState(EnemyState.Chasing);
+                agent.isStopped = true;
+
+                transform.LookAt(lookPosition);
+
+                if (Time.time >= nextChargeTime)
+                {
+                    ChangeState(EnemyState.Charging);
+                    break;
+                }
+
+                if (distanceToPlayer < attackRange && HasLineOfSight())
+                {
+                    ChangeState(EnemyState.Attacking);
+                }
                 break;
 
             case EnemyState.Chasing:
@@ -62,8 +80,6 @@ public class ChargeEnemy : MeleeEnemy
                 agent.isStopped = true;
                 agent.velocity = Vector3.zero;
 
-                Vector3 lookPosition = target.position;
-                lookPosition.y = transform.position.y;
                 transform.LookAt(lookPosition);
 
                 if (Time.time >= nextChargeTime)
@@ -74,7 +90,7 @@ public class ChargeEnemy : MeleeEnemy
 
                 if (distanceToPlayer > attackRange || !HasLineOfSight())
                 {
-                    ChangeState(EnemyState.Chasing);
+                    ChangeState(EnemyState.Idle);
                     break;
                 }
 
@@ -118,6 +134,10 @@ public class ChargeEnemy : MeleeEnemy
         {
             switch (currentState)
             {
+                case EnemyState.Idle:
+                    enemyRenderer.material.color = baseColor;
+                    break;
+
                 case EnemyState.Attacking:
                     enemyRenderer.material.color = Color.red;
                     attackRate = baseAttackRate;
@@ -181,7 +201,7 @@ public class ChargeEnemy : MeleeEnemy
         nextChargeTime = Time.time + chargeRate + chargeDuration;
 
         chargeRoutine = null;
-        ChangeState(EnemyState.Chasing);
+        ChangeState(EnemyState.Idle);
     }
 
     private void OnCollisionEnter(Collision collision)
