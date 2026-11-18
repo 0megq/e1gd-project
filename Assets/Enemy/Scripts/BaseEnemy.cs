@@ -40,7 +40,7 @@ public class BaseEnemy : MonoBehaviour
         TryGetComponent<Renderer>(out enemyRenderer);
     }
     
-    public void ReceiveDamage(float damage)
+    public virtual void ReceiveDamage(float damage)
     {
         if (health - damage <= 0)
         {
@@ -54,6 +54,6 @@ public class BaseEnemy : MonoBehaviour
 
     protected virtual void Attack()
     {
-        Debug.Log("Attack!");
+        // Debug.Log("Attack!");
     }
 }
