@@ -43,6 +43,11 @@ public class FlyingRangedEnemy : BaseEnemy
     {
         if (target == null || agent == null) return;
 
+        if (body == null)
+        {
+            return;
+        }
+
         UpdateState();
         UpdateFlight();
     }
@@ -150,6 +155,11 @@ public class FlyingRangedEnemy : BaseEnemy
     {
         if (currentState == newState) return;
 
+        if (body == null)
+        {
+            return;
+        }
+
         currentState = newState;
 
         if (body.TryGetComponent<Renderer>(out Renderer enemyRenderer))
@@ -207,6 +217,10 @@ public class FlyingRangedEnemy : BaseEnemy
 
     private bool HasLineOfSight()
     {
+        if (body == null)
+        {
+            return false;
+        }
         Vector3 startPosition = body.position;
         Vector3 directionToPlayer = (target.position - body.position).normalized;
 
