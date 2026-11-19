@@ -23,12 +23,14 @@ public class BaseEnemy : MonoBehaviour
 
     protected Renderer enemyRenderer;
 
+    public Transform player;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected virtual void Start()
     {
         health = maxHealth;
 
-        Debug.Log(health);
+        // Debug.Log(health);
 
         TryGetComponent<NavMeshAgent>(out agent);
 
