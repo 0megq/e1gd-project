@@ -119,6 +119,28 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &283142146 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3344914809914663389, guid: 0c8f87d2cf9ea92468752fd58c35f654, type: 3}
+  m_PrefabInstance: {fileID: 2646423843469670627}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &283142151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 283142146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cdbedfbb580e744f83aec1287518b07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlyingRangedEnemyBody
+  maxHealth: 100
+  speed: 5
+  damageAmount: 10
+  target: {fileID: 970487419}
+  enemy: {fileID: 597211654}
 --- !u!1 &333028234
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,6 +253,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1395619078}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &597211654 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6942394505747692353, guid: 0c8f87d2cf9ea92468752fd58c35f654, type: 3}
+  m_PrefabInstance: {fileID: 2646423843469670627}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebe77a1cd3e133e41b25e4100efbd9f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlyingRangedEnemy
 --- !u!1 &621105355
 GameObject:
   m_ObjectHideFlags: 0
@@ -1379,9 +1412,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4248105533797832558, guid: 3d19fe89eb23fa54d97d39c9e4fb770d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6090652651265076414, guid: 3d19fe89eb23fa54d97d39c9e4fb770d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8650986179485571460, guid: 3d19fe89eb23fa54d97d39c9e4fb770d, type: 3}
       propertyPath: m_Name
       value: BeamEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8650986179485571460, guid: 3d19fe89eb23fa54d97d39c9e4fb770d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8650986179485571460, guid: 3d19fe89eb23fa54d97d39c9e4fb770d, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 8707585912764183039, guid: 3d19fe89eb23fa54d97d39c9e4fb770d, type: 3}
       propertyPath: target
@@ -1400,9 +1449,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3344914809914663389, guid: 0c8f87d2cf9ea92468752fd58c35f654, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3344914809914663389, guid: 0c8f87d2cf9ea92468752fd58c35f654, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 3810060109204981163, guid: 0c8f87d2cf9ea92468752fd58c35f654, type: 3}
       propertyPath: m_Name
       value: FlightEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 3810060109204981163, guid: 0c8f87d2cf9ea92468752fd58c35f654, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3810060109204981163, guid: 0c8f87d2cf9ea92468752fd58c35f654, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 6942394505747692353, guid: 0c8f87d2cf9ea92468752fd58c35f654, type: 3}
       propertyPath: target
@@ -1451,7 +1516,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3344914809914663389, guid: 0c8f87d2cf9ea92468752fd58c35f654, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 283142151}
   m_SourcePrefab: {fileID: 100100000, guid: 0c8f87d2cf9ea92468752fd58c35f654, type: 3}
 --- !u!1001 &3081063994947314208
 PrefabInstance:
@@ -1464,6 +1532,14 @@ PrefabInstance:
     - target: {fileID: 3064425001385376851, guid: 50cd077937958a04cab4ae8714f9e7c6, type: 3}
       propertyPath: m_Name
       value: ChargeEnemyTest
+      objectReference: {fileID: 0}
+    - target: {fileID: 3064425001385376851, guid: 50cd077937958a04cab4ae8714f9e7c6, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3064425001385376851, guid: 50cd077937958a04cab4ae8714f9e7c6, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 4288656189638700775, guid: 50cd077937958a04cab4ae8714f9e7c6, type: 3}
       propertyPath: m_LocalPosition.x

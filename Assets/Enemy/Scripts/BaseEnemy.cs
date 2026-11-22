@@ -23,12 +23,14 @@ public class BaseEnemy : MonoBehaviour
 
     protected Renderer enemyRenderer;
 
+    public Transform player;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected virtual void Start()
     {
         health = maxHealth;
 
-        Debug.Log(health);
+        // Debug.Log(health);
 
         TryGetComponent<NavMeshAgent>(out agent);
 
@@ -40,7 +42,7 @@ public class BaseEnemy : MonoBehaviour
         TryGetComponent<Renderer>(out enemyRenderer);
     }
     
-    public void ReceiveDamage(float damage)
+    public virtual void ReceiveDamage(float damage)
     {
         if (health - damage <= 0)
         {
@@ -54,6 +56,6 @@ public class BaseEnemy : MonoBehaviour
 
     protected virtual void Attack()
     {
-        Debug.Log("Attack!");
+        // Debug.Log("Attack!");
     }
 }
