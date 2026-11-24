@@ -16,7 +16,7 @@ public class MeleeEnemy : BaseEnemy
     protected override void Start()
     {
         base.Start();
-        baseColor = enemyRenderer.material.color;
+        if (enemyRenderer != null) baseColor = enemyRenderer.material.color;
         attackRate = baseAttackRate;
     }
 

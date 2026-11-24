@@ -23,7 +23,6 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
-        print(enemyCount);
         if(spawner != null && enemyCount == 0)
         {
             spawner.spawn(waveNum);

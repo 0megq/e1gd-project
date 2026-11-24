@@ -13,6 +13,7 @@ public class ChargeEnemy : MeleeEnemy
     private float nextChargeTime = 0f;
     private Coroutine chargeRoutine = null;
     private Rigidbody rb = null;
+    private Animator animator = null;
 
     protected override void Start()
     {
@@ -20,6 +21,8 @@ public class ChargeEnemy : MeleeEnemy
 
         chargeRate = Random.Range(minChargeRate, maxChargeRate);
         nextChargeTime = Time.time + chargeRate + chargeDuration;
+
+        TryGetComponent<Animator>(out animator);
 
         TryGetComponent<Rigidbody>(out rb);
         if (rb != null) rb.isKinematic = true;
@@ -123,6 +126,7 @@ public class ChargeEnemy : MeleeEnemy
 
                 chargeRate = Random.Range(minChargeRate, maxChargeRate);
                 nextChargeTime = Time.time + chargeRate + chargeDuration;
+                animator.SetTrigger("walk");
 
                 chargeRoutine = null;
             }
@@ -130,7 +134,7 @@ public class ChargeEnemy : MeleeEnemy
 
         currentState = newState;
 
-        if (TryGetComponent<Renderer>(out Renderer enemyRenderer))
+        if (enemyRenderer != null)
         {
             switch (currentState)
             {
@@ -141,6 +145,8 @@ public class ChargeEnemy : MeleeEnemy
                 case EnemyState.Attacking:
                     enemyRenderer.material.color = Color.red;
                     attackRate = baseAttackRate;
+                    Debug.Log("charging");
+                    animator.SetTrigger("charge");
                     break;
 
                 case EnemyState.Chasing:
@@ -154,6 +160,8 @@ public class ChargeEnemy : MeleeEnemy
 
                 case EnemyState.Charging:
                     enemyRenderer.material.color = Color.yellow;
+                    Debug.Log("lunging");
+                    animator.SetTrigger("lunge");
                     if (chargeRoutine == null)
                     {
                         chargeRoutine = StartCoroutine(Charge());
