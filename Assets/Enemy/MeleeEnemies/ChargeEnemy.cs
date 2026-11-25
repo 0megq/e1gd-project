@@ -11,6 +11,7 @@ public class ChargeEnemy : MeleeEnemy
     [SerializeField] private float chargeSpeed = 15f;
 
     [SerializeField] private float jumpForce = 10f;
+    [SerializeField] private float chargeRange = 10f;
 
     private float chargeRate = 0f;
     private float nextChargeTime = 0f;
@@ -62,16 +63,10 @@ public class ChargeEnemy : MeleeEnemy
             case EnemyState.Chasing:
                 agent.isStopped = false;
                 agent.SetDestination(target.position);
-
-                if (Time.time >= nextChargeTime)
+                if (Time.time >= nextChargeTime && distanceToPlayer < chargeRange && HasLineOfSight())
                 {
                     ChangeState(EnemyState.Charging);
                     break;
-                }
-
-                if (distanceToPlayer < attackRange && HasLineOfSight())
-                {
-                    ChangeState(EnemyState.Attacking);
                 }
                 break;
 
@@ -117,7 +112,9 @@ public class ChargeEnemy : MeleeEnemy
 
             case EnemyState.Lunging:
                 stateTimer += Time.deltaTime;
-                if (stateTimer >= lungeDuration)
+                // If enemy slows down too much (by e.g. hitting a wall) immediately leave the state
+                // Also leave if this state reaches its max duration
+                if (stateTimer >= lungeDuration || rb.linearVelocity.sqrMagnitude < 20.0f)
                 {
                     ChangeState(EnemyState.AttackOut);
                 }
@@ -127,7 +124,7 @@ public class ChargeEnemy : MeleeEnemy
                 stateTimer += Time.deltaTime;
                 if (stateTimer >= attackOutDuration)
                 {
-                    ChangeState(EnemyState.Idle);
+                    ChangeState(EnemyState.Chasing);
                 }
                 break;
         }
@@ -183,7 +180,6 @@ public class ChargeEnemy : MeleeEnemy
                 agent.isStopped = true;
                 agent.velocity = Vector3.zero;
                 if (enemyRenderer != null) enemyRenderer.material.color = Color.yellow;
-                Debug.Log("charging");
                 if (animator != null) animator.SetTrigger("charge");
                 break;
 
@@ -196,7 +192,6 @@ public class ChargeEnemy : MeleeEnemy
                     rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                 }
                 if (enemyRenderer != null) enemyRenderer.material.color = new Color(1f, 0.5f, 0f);
-                Debug.Log("lunging");
                 if (animator != null) animator.SetTrigger("lunge");
                 break;
 

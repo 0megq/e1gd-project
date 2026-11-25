@@ -107,7 +107,7 @@ public class MeleeEnemy : BaseEnemy
         Vector3 startPosition = transform.position;
         Vector3 directionToPlayer = (target.position - transform.position).normalized;
 
-        if (Physics.Raycast(startPosition, directionToPlayer, out RaycastHit hit, attackRange, lineOfSightLayers))
+        if (Physics.Raycast(startPosition, directionToPlayer, out RaycastHit hit, float.PositiveInfinity, lineOfSightLayers))
         {
             if (hit.transform == target)
             {

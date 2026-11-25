@@ -252,13 +252,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 192
   baseAttackRate: 2
-  minChargeRate: 5
-  maxChargeRate: 10
-  chargeDuration: 3
-  lungeDuration: 1.5
-  attackOutDuration: 0.75
+  minChargeRate: 0.9
+  maxChargeRate: 1.1
+  chargeDuration: 2
+  lungeDuration: 1
+  attackOutDuration: 0.1
   chargeSpeed: 10
   jumpForce: 10
+  chargeRange: 8
 --- !u!195 &3207881928464732448
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -327,5 +328,5 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 16
   m_CollisionDetection: 0

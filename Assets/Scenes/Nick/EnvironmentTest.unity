@@ -320,11 +320,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3689276700569064515, guid: c571dee9fb026334f9743906527d674f, type: 3}
   m_PrefabInstance: {fileID: 162180682}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &162180691 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3795388405768808141, guid: c571dee9fb026334f9743906527d674f, type: 3}
-  m_PrefabInstance: {fileID: 162180682}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &219777135
 Mesh:
   m_ObjectHideFlags: 0
@@ -735,10 +730,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ChargeEnemy
       objectReference: {fileID: 0}
-    - target: {fileID: 2854912925696577463, guid: 832e2c1ce837a0849bd7239a893cedbb, type: 3}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 162180691}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
