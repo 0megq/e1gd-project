@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
             ui.updateAmmo(pShooting.gun.getCurAmmo(), pShooting.gun.magSize);
             ui.updateHealth(pController.getCurHealth(), pController.getMaxHealth());
         }
+        presenter.SetBullets(pShooting.gun.getCurAmmo() > 0);
 
         // update the bullet spawn point
         pShooting.gun.bulletSpawnPoint = pController.cam.ScreenToWorldPoint(presenter.firepoint.position + Vector3.forward * pShooting.gun.bullet.GetComponent<Bullet>().distanceFromPlayer);
@@ -39,6 +40,6 @@ public class GameManager : MonoBehaviour
 
     void WeaponFired()
     {
-        presenter.PlayAnimation();
+        presenter.Fire();
     }
 }
