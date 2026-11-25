@@ -11,7 +11,9 @@ public class BaseEnemy : MonoBehaviour
         Fleeing,
         Charging,
         Lunging,
-        AttackOut
+        AttackOut,
+        Jumping,
+        Landing
     }
 
     protected float health = 0f;
