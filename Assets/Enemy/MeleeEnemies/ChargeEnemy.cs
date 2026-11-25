@@ -137,7 +137,6 @@ public class ChargeEnemy : MeleeEnemy
     {
         if (currentState == newState) return;
 
-        // On Exit
         switch (currentState)
         {
             case EnemyState.Lunging:
@@ -158,7 +157,6 @@ public class ChargeEnemy : MeleeEnemy
         currentState = newState;
         stateTimer = 0f;
 
-        // On Enter
         switch (currentState)
         {
             case EnemyState.Idle:
