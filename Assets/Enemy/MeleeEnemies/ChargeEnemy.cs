@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class ChargeEnemy : MeleeEnemy
@@ -7,11 +6,13 @@ public class ChargeEnemy : MeleeEnemy
     [SerializeField] private float minChargeRate = 3f;
     [SerializeField] private float maxChargeRate = 5f;
     [SerializeField] private float chargeDuration = 3f;
+    [SerializeField] private float lungeDuration = 1f;
+    [SerializeField] private float attackOutDuration = 0.75f;
     [SerializeField] private float chargeSpeed = 15f;
 
     private float chargeRate = 0f;
     private float nextChargeTime = 0f;
-    private Coroutine chargeRoutine = null;
+    private float stateTimer = 0f;
     private Rigidbody rb = null;
     private Animator animator = null;
 
@@ -20,7 +21,7 @@ public class ChargeEnemy : MeleeEnemy
         base.Start();
 
         chargeRate = Random.Range(minChargeRate, maxChargeRate);
-        nextChargeTime = Time.time + chargeRate + chargeDuration;
+        nextChargeTime = Time.time + chargeRate;
 
         TryGetComponent<Animator>(out animator);
 
@@ -50,19 +51,10 @@ public class ChargeEnemy : MeleeEnemy
         {
             case EnemyState.Idle:
                 agent.isStopped = true;
-
                 transform.LookAt(lookPosition);
 
-                if (Time.time >= nextChargeTime)
-                {
-                    ChangeState(EnemyState.Charging);
-                    break;
-                }
+                ChangeState(EnemyState.Chasing);
 
-                if (distanceToPlayer < attackRange && HasLineOfSight())
-                {
-                    ChangeState(EnemyState.Attacking);
-                }
                 break;
 
             case EnemyState.Chasing:
@@ -107,6 +99,34 @@ public class ChargeEnemy : MeleeEnemy
                 break;
 
             case EnemyState.Charging:
+                Vector3 directionToTarget = (lookPosition - transform.position).normalized;
+                if (directionToTarget != Vector3.zero)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+                }
+
+                stateTimer += Time.deltaTime;
+                if (stateTimer >= chargeDuration)
+                {
+                    ChangeState(EnemyState.Lunging);
+                }
+                break;
+
+            case EnemyState.Lunging:
+                stateTimer += Time.deltaTime;
+                if (stateTimer >= lungeDuration)
+                {
+                    ChangeState(EnemyState.AttackOut);
+                }
+                break;
+
+            case EnemyState.AttackOut:
+                stateTimer += Time.deltaTime;
+                if (stateTimer >= attackOutDuration)
+                {
+                    ChangeState(EnemyState.Idle);
+                }
                 break;
         }
     }
@@ -115,125 +135,84 @@ public class ChargeEnemy : MeleeEnemy
     {
         if (currentState == newState) return;
 
-        if (currentState == EnemyState.Charging)
+        // On Exit
+        switch (currentState)
         {
-            if (chargeRoutine != null)
-            {
-                StopCoroutine(chargeRoutine);
+            case EnemyState.Lunging:
+                if (rb != null)
+                {
+                    rb.linearVelocity = Vector3.zero;
+                    rb.isKinematic = true;
+                }
 
-                rb.linearVelocity = Vector3.zero;
-                rb.isKinematic = true;
                 agent.enabled = true;
                 agent.Warp(transform.position);
 
                 chargeRate = Random.Range(minChargeRate, maxChargeRate);
-                nextChargeTime = Time.time + chargeRate + chargeDuration;
-                animator.SetTrigger("walk");
-
-                chargeRoutine = null;
-            }
+                nextChargeTime = Time.time + chargeRate;
+                break;
         }
 
         currentState = newState;
+        stateTimer = 0f;
 
-        if (enemyRenderer != null)
+        // On Enter
+        switch (currentState)
         {
-            switch (currentState)
-            {
-                case EnemyState.Idle:
-                    enemyRenderer.material.color = baseColor;
-                    break;
+            case EnemyState.Idle:
+                if (enemyRenderer != null) enemyRenderer.material.color = baseColor;
+                if (animator != null) animator.SetTrigger("walk");
+                break;
 
-                case EnemyState.Attacking:
-                    enemyRenderer.material.color = Color.red;
-                    attackRate = baseAttackRate;
-                    Debug.Log("charging");
-                    animator.SetTrigger("charge");
-                    break;
+            case EnemyState.Attacking:
+                if (enemyRenderer != null) enemyRenderer.material.color = Color.red;
+                attackRate = baseAttackRate;
+                // if (animator != null) animator.SetTrigger("attack");
+                break;
 
-                case EnemyState.Chasing:
-                    enemyRenderer.material.color = baseColor;
-                    break;
+            case EnemyState.Chasing:
+                if (enemyRenderer != null) enemyRenderer.material.color = baseColor;
+                if (animator != null) animator.SetTrigger("walk");
+                break;
 
-                case EnemyState.Fleeing:
-                    enemyRenderer.material.color = Color.green;
-                    attackRate = baseAttackRate * 2;
-                    break;
+            case EnemyState.Fleeing:
+                if (enemyRenderer != null) enemyRenderer.material.color = Color.green;
+                attackRate = baseAttackRate * 2;
+                break;
 
-                case EnemyState.Charging:
-                    enemyRenderer.material.color = Color.yellow;
-                    Debug.Log("lunging");
-                    animator.SetTrigger("lunge");
-                    if (chargeRoutine == null)
-                    {
-                        chargeRoutine = StartCoroutine(Charge());
-                    }
-                    break;
-            }
+            case EnemyState.Charging:
+                agent.isStopped = true;
+                agent.velocity = Vector3.zero;
+                if (enemyRenderer != null) enemyRenderer.material.color = Color.yellow;
+                Debug.Log("charging");
+                if (animator != null) animator.SetTrigger("charge");
+                break;
+
+            case EnemyState.Lunging:
+                agent.enabled = false;
+                if (rb != null)
+                {
+                    rb.isKinematic = false;
+                    rb.linearVelocity = transform.forward * chargeSpeed;
+                }
+                if (enemyRenderer != null) enemyRenderer.material.color = new Color(1f, 0.5f, 0f);
+                Debug.Log("lunging");
+                if (animator != null) animator.SetTrigger("lunge");
+                break;
+
+            case EnemyState.AttackOut:
+                agent.isStopped = true;
+                agent.velocity = Vector3.zero;
+                if (enemyRenderer != null) enemyRenderer.material.color = Color.gray;
+                break;
         }
-    }
-
-    private IEnumerator Charge()
-    {
-        agent.isStopped = true;
-        agent.velocity = Vector3.zero;
-
-        float timer = 0f;
-
-        while (timer < chargeDuration)
-        {
-            Vector3 lookPosition = target.position;
-            lookPosition.y = transform.position.y;
-            Vector3 directionToTarget = (lookPosition - transform.position).normalized;
-            if (directionToTarget != Vector3.zero)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
-            }
-
-            timer += Time.deltaTime;
-            yield return null;
-        }
-
-        agent.enabled = false;
-        rb.isKinematic = false;
-
-        rb.linearVelocity = transform.forward * chargeSpeed;
-
-        yield return new WaitForSeconds(chargeDuration / 3);
-
-        rb.linearVelocity = Vector3.zero;
-        rb.isKinematic = true;
-        agent.enabled = true;
-        agent.Warp(transform.position);
-
-        chargeRate = Random.Range(minChargeRate, maxChargeRate);
-        nextChargeTime = Time.time + chargeRate + chargeDuration;
-
-        chargeRoutine = null;
-        ChangeState(EnemyState.Idle);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            if (chargeRoutine != null)
-            {
-                StopCoroutine(chargeRoutine);
-
-                rb.linearVelocity = Vector3.zero;
-                rb.isKinematic = true;
-                agent.enabled = true;
-                agent.Warp(transform.position);
-
-                chargeRate = Random.Range(minChargeRate, maxChargeRate);
-                nextChargeTime = Time.time + chargeRate + chargeDuration;
-
-                chargeRoutine = null;
-
-                ChangeState(EnemyState.Attacking);
-            }
+            ChangeState(EnemyState.AttackOut);
 
             Attack();
         }
