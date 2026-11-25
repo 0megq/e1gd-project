@@ -3,9 +3,21 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    private GameObject[] spawnPoints;
+
 
     [SerializeField] BaseEnemy[] enemyTypes;
+
+    [Header("Wave formula")]
+    [SerializeField] int baseEnemies = 3;
+    [SerializeField] float growthPerWave = 2f;
+    [SerializeField] float timeBetweenWaves = 5f;
+    [SerializeField] float spawnInterval = 0.4f;
+
+    int aliveEnemies;
+    private GameObject[] spawnPoints;
+
+    public int WaveNum { get; private set; } = 0;
+    public event System.Action<int> WaveStarted;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
