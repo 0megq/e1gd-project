@@ -1412,25 +1412,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4248105533797832558, guid: 3d19fe89eb23fa54d97d39c9e4fb770d, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6090652651265076414, guid: 3d19fe89eb23fa54d97d39c9e4fb770d, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 8650986179485571460, guid: 3d19fe89eb23fa54d97d39c9e4fb770d, type: 3}
       propertyPath: m_Name
       value: BeamEnemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 8650986179485571460, guid: 3d19fe89eb23fa54d97d39c9e4fb770d, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8650986179485571460, guid: 3d19fe89eb23fa54d97d39c9e4fb770d, type: 3}
-      propertyPath: m_TagString
-      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 8707585912764183039, guid: 3d19fe89eb23fa54d97d39c9e4fb770d, type: 3}
       propertyPath: target

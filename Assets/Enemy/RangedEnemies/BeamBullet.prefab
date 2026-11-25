@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1694252299918060727}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BeamBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 3768043671704370738}
   - component: {fileID: 899485317874733579}
   - component: {fileID: 7389555512452604443}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
