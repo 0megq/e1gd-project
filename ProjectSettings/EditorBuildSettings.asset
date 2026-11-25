@@ -8,5 +8,17 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Nick/EnvironmentTest.unity
     guid: 82035cc92998b994d8b32ab474ae307f
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 3b5066e2d0bc52640a64d33e69b90d7c
+  - enabled: 1
+    path: Assets/Scenes/MainArena.unity
+    guid: 7d198411b871a924aa655ee9f36dde1b
+  - enabled: 1
+    path: Assets/Scenes/CreditsScene.unity
+    guid: f8d6533bc3746b044bf01ea98eaac8a0
+  - enabled: 1
+    path: Assets/Scenes/VolumeScene.unity
+    guid: 2baa805c80bcba449ab288d955b3db85
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
