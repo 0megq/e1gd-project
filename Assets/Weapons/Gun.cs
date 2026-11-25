@@ -11,6 +11,7 @@ public class Gun : MonoBehaviour
 
     public GameObject bullet;
     public Vector3 bulletSpawnPoint;
+    public ParticleSystem particleSystem;
 
     protected int currentAmmo;
     protected bool isReloading = false;
@@ -38,6 +39,7 @@ public class Gun : MonoBehaviour
 
         // Fire the gun
         shotEvent.Invoke();
+        particleSystem.Play();
 
         // restart firecount timer
         nextTimeToFire = Time.time + fireRate;
