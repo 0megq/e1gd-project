@@ -10,6 +10,8 @@ public class ChargeEnemy : MeleeEnemy
     [SerializeField] private float attackOutDuration = 0.75f;
     [SerializeField] private float chargeSpeed = 15f;
 
+    [SerializeField] private float jumpForce = 10f;
+
     private float chargeRate = 0f;
     private float nextChargeTime = 0f;
     private float stateTimer = 0f;
@@ -167,7 +169,6 @@ public class ChargeEnemy : MeleeEnemy
             case EnemyState.Attacking:
                 if (enemyRenderer != null) enemyRenderer.material.color = Color.red;
                 attackRate = baseAttackRate;
-                // if (animator != null) animator.SetTrigger("attack");
                 break;
 
             case EnemyState.Chasing:
@@ -194,6 +195,7 @@ public class ChargeEnemy : MeleeEnemy
                 {
                     rb.isKinematic = false;
                     rb.linearVelocity = transform.forward * chargeSpeed;
+                    rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                 }
                 if (enemyRenderer != null) enemyRenderer.material.color = new Color(1f, 0.5f, 0f);
                 Debug.Log("lunging");
