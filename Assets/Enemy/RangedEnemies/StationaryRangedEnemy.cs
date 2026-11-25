@@ -15,6 +15,8 @@ public class StationaryRangedEnemy : RangedEnemy
     // Update is called once per frame
     protected override void Update()
     {
+        TrackPlayerTarget();
+        
         if (target == null || agent == null) return;
 
         UpdateState();

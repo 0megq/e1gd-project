@@ -40,7 +40,7 @@ public class BaseEnemy : MonoBehaviour
         TryGetComponent<Renderer>(out enemyRenderer);
     }
 
-    protected virtual void Update()
+    protected void TrackPlayerTarget()
     {
         target = GameObject.FindGameObjectWithTag("Player").transform;
     }

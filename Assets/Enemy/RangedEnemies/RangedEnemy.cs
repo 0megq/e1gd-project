@@ -31,7 +31,7 @@ public class RangedEnemy : BaseEnemy
 
     protected virtual void Update()
     {
-        base.Update();
+        TrackPlayerTarget();
 
         if (target == null || agent == null) return;
 
