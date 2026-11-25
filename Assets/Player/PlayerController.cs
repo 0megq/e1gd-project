@@ -13,8 +13,8 @@ public class PlayerController : MonoBehaviour
     public Camera cam;
     private float xRot = 0f;
     private float yRot = 0f;
-    private float mouseX;
-    private float mouseY;
+    private float mouseX = 0f;
+    private float mouseY = 0f;
 
     private float health = 0f;
     [SerializeField] private float maxHealth = 100f;
