@@ -32,6 +32,8 @@ public class ChargeEnemy : MeleeEnemy
 
     protected override void Update()
     {
+        base.Update();
+
         if (target == null || agent == null) return;
 
         UpdateState();

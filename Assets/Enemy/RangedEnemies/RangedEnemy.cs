@@ -31,6 +31,8 @@ public class RangedEnemy : BaseEnemy
 
     protected virtual void Update()
     {
+        base.Update();
+
         if (target == null || agent == null) return;
 
         UpdateState();

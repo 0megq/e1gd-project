@@ -41,6 +41,8 @@ public class FlyingRangedEnemy : BaseEnemy
     // Update is called once per frame
     void Update()
     {
+        base.Update();
+
         if (target == null || agent == null) return;
 
         if (body == null)

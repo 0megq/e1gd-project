@@ -23,8 +23,6 @@ public class BaseEnemy : MonoBehaviour
 
     protected Renderer enemyRenderer;
 
-    public Transform player;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected virtual void Start()
     {
@@ -40,6 +38,11 @@ public class BaseEnemy : MonoBehaviour
         }
 
         TryGetComponent<Renderer>(out enemyRenderer);
+    }
+
+    protected virtual void Update()
+    {
+        target = GameObject.FindGameObjectWithTag("Player").transform;
     }
     
     public virtual void ReceiveDamage(float damage)

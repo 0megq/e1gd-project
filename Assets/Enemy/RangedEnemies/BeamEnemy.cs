@@ -25,6 +25,7 @@ public class BeamEnemy : BaseEnemy
 
     void Update()
     {
+        base.Update();
         if (target == null || agent == null) return;
         UpdateState();
     }

@@ -22,6 +22,8 @@ public class MeleeEnemy : BaseEnemy
 
     protected virtual void Update()
     {
+        base.Update();
+
         if (target == null || agent == null)
         {
             return;
