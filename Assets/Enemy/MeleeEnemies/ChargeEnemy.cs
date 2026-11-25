@@ -158,7 +158,7 @@ public class ChargeEnemy : MeleeEnemy
         {
             case EnemyState.Idle:
                 if (enemyRenderer != null) enemyRenderer.material.color = baseColor;
-                if (animator != null) animator.SetTrigger("walk");
+                if (animator != null) animator.Play("idle");
                 break;
 
             case EnemyState.Attacking:
