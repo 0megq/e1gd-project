@@ -39,7 +39,7 @@ public class Gun : MonoBehaviour
 
         // Fire the gun
         shotEvent.Invoke();
-        particleSystem.Play();
+        if (particleSystem != null) particleSystem.Play();
 
         // restart firecount timer
         nextTimeToFire = Time.time + fireRate;

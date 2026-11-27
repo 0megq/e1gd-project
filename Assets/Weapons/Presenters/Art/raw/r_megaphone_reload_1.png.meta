@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: cff4db161ece648429fc6e11bf84cd50
+guid: 42a85df0d1f8ea244b715c19d7546859
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8674452169973808814
-    second: r_megaphone_rest_0
+      213: 8327026164053599677
+    second: r_megaphone_reload_1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -115,13 +115,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: r_megaphone_rest_0
+      name: r_megaphone_reload_1_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 375
-        height: 380
+        width: 466
+        height: 412
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -130,8 +130,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 251489be5b72e9780800000000000000
-      internalID: -8674452169973808814
+      spriteID: db56ccf7d2a8f8370800000000000000
+      internalID: 8327026164053599677
       vertices: []
       indices: 
       edges: []
